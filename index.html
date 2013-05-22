@@ -1,0 +1,382 @@
+
+<!DOCTYPE html>
+<html>
+  <head>
+    <title>godpm</title>
+    <meta charset='utf-8'>
+    <script src='static/slides.js'></script>
+  </head>
+
+  <body style='display: none'>
+
+    <section class='slides layout-widescreen'>
+      
+      <article>
+        <h1>godpm</h1>
+        <h3>A dependency package manager for the Go language.</h3>
+        <h3>17 May 2013</h3>
+        
+          <div class="presenter">
+            
+  
+  <p>
+    Casey Marshall
+  </p>
+  
+
+  
+  <p>
+    Software Flâneur
+  </p>
+  
+
+          </div>
+        
+          <div class="presenter">
+            
+  
+  <p>
+    
+  </p>
+  
+
+          </div>
+        
+      </article>
+      
+  
+  
+      <article>
+      
+        <h3>Package Managers</h3>
+        
+  
+  <p>
+    &#34;Every successful software system evolves its own special unique snowflake of a package management system.&#34;
+  </p>
+  
+
+  
+  <p>
+    Operating systems: rpm, deb, ports, brew
+  </p>
+  
+
+  
+  <p>
+    Programming languages: pip, gem, npm, cpan, cabal
+  </p>
+  
+
+  
+  <p>
+    Applications: Mozilla Firefox/T-Bird, Google Chrome, Eclipse
+  </p>
+  
+
+  
+  <p>
+    &#34;The wonderful thing about package managers, is that there are so many to choose from!&#34;
+  </p>
+  
+
+      
+      </article>
+  
+  
+  
+      <article>
+      
+        <h3>Go philosophy</h3>
+        
+  
+  <p>
+    There is this general reluctance to rebuild the same imperfect, complicated solutions.
+  </p>
+  
+
+  <ul>
+  
+    <li>Templates</li>
+  
+    <li>Dynamic libraries</li>
+  
+    <li>Package managers</li>
+  
+  </ul>
+
+  
+  <p>
+    Question all the harmful things that have become accepted as status quo.
+<br>
+
+    This resistance to follow past compromises, is why Go can be so refreshing.
+  </p>
+  
+
+  
+  <p>
+    DVCS-based &#34;go get&#34; package dependency management works for simple, rapid development. It also works for well-managed projects that follow a gentleman&#39;s agreement.
+  </p>
+  
+
+  
+  <p>
+    This simple package management works for &#34;The Happy Path&#34;.
+<br>
+
+    If you need better than that...
+  </p>
+  
+
+      
+      </article>
+  
+  
+  
+      <article>
+      
+        <h3>Go manage your project</h3>
+        
+<div class="image">
+  <img src="img/angry-baby.jpg">
+</div>
+
+  
+  <p>
+    You are responsible for the third-party project dependencies you chose for that Kickstarter project. Or, <a href="http://forums.thedailywtf.com/forums/t/27755.aspx?PageIndex=1" target="_blank">you confused a gopher for your mama</a>.
+  </p>
+  
+
+      
+      </article>
+  
+  
+  
+      <article>
+      
+        <h3>Responsible for what?</h3>
+        
+  
+  <p>
+    Relocating &#34;connected&#34; packages obtained from &#34;go get&#34;...
+<br>
+
+    To a &#34;disconnected&#34; local package namespace?
+<br>
+
+    Or your own GitHub forks?
+<br>
+
+    What about multiple DVCS for third-party deps?
+  </p>
+  
+
+  
+  <p>
+    Tracking upstream changes for the above.
+  </p>
+  
+
+  
+  <p>
+    Re-creating the same third-party package state for other developers on your team.
+<br>
+
+    Or for a Linux distribution package?
+  </p>
+  
+
+  
+  <p>
+    Providing attribution for all your third-party licenses.
+  </p>
+  
+
+  
+  <p>
+    Now be honest, are you really managing your Go package dependencies as well as you should?
+<br>
+
+    If you are, I bet you are busy, or you have some awesome tools.
+<br>
+
+    Until you share them, I propose...
+  </p>
+  
+
+      
+      </article>
+  
+  
+  
+      <article>
+      
+        <h3>The Go Dependency Package Manager (godpm)</h3>
+        
+  
+  <p>
+    Represent a project&#39;s package dependencies as a YAML file.
+<br>
+
+    - What do I need to build this project?
+<br>
+
+    - Where do I get it?
+<br>
+
+    - What revision do I get?
+<br>
+
+    - How should I map it to a local $GOPATH?
+<br>
+
+    - How should I update it? Or should I update it?
+  </p>
+  
+
+  
+  <p>
+    godpm import
+<br>
+
+    - Parse your projects source files for external dependencies.
+<br>
+
+    - Discover which DVCS they are using.
+<br>
+
+    - Create the above godpm.yml file.
+<br>
+
+    - Map the dependencies into a project-local $GOPATH.
+<br>
+
+    - Rewrite your project&#39;s imports.
+<br>
+
+    - Generate a profile script (similar to virtualenv &#39;activate&#39;) to set $GOPATH.
+  </p>
+  
+
+      
+      </article>
+  
+  
+  
+      <article>
+      
+        <h3>godpm Example</h3>
+        
+  
+  <div class="code"><pre>---
+name: hockeypuck
+upstream: launchpad.net/hockeypuck
+deps:
+ - pkg: conflux
+   upstream: github.com/cmars/conflux
+   rev: HEAD
+ - pkg: go.crypto/openpgp
+   upstream: code.google.com/p/go.crypto/openpgp
+   rev: tip</pre></div>
+  
+
+      
+      </article>
+  
+  
+  
+      <article>
+      
+        <h3>Managing Packages</h3>
+        
+  
+  <p>
+    godpm pull
+<br>
+
+    - Update project-local $GOPATH according to rules in godpm.yml.
+  </p>
+  
+
+  
+  <p>
+    godpm pin &lt;local package name&gt; &lt;rev&gt;
+<br>
+
+    - Revision identifier using DVCS-specific nomenclature (tip, HEAD, branch, 0c3ae5, rel1.1, etc.)
+  </p>
+  
+
+  
+  <p>
+    godpm tar
+<br>
+
+    - Create a tarball of the project with $GOPATH.
+  </p>
+  
+
+  
+  <p>
+    godpm license
+<br>
+
+    - Collect all the LICENSE files from your projects. Warn if some are missing.
+  </p>
+  
+
+      
+      </article>
+  
+  
+  
+      <article>
+      
+        <h3>Request for Comments</h3>
+        
+  
+  <p>
+    I haven&#39;t started this project yet. I&#39;d like to gather feedback from the Go community before I go too far in the weeds.
+  </p>
+  
+
+      
+      </article>
+  
+  
+
+      <article>
+        <h3>Thank you</h1>
+        
+          <div class="presenter">
+            
+  
+  <p>
+    Casey Marshall
+  </p>
+  
+
+  
+  <p>
+    Software Flâneur
+  </p>
+  
+<p class="link"><a href="mailto:casey.marshall@gmail.com" target="_blank">casey.marshall@gmail.com</a></p><p class="link"><a href="http://cmars.sdf.org" target="_blank">http://cmars.sdf.org</a></p>
+          </div>
+        
+          <div class="presenter">
+            
+  
+  <p>
+    
+  </p>
+  
+
+          </div>
+        
+      </article>
+
+  </body>
+  
+</html>
