@@ -1,0 +1,110 @@
+godpm
+A dependency package manager for the Go language.
+17 May 2013
+Tags: golang,packaging,dependencies,distribution,flamewars
+
+Casey Marshall
+Software Flâneur
+casey.marshall@gmail.com
+http://cmars.sdf.org
+
+
+* Package Managers
+
+"Every successful software system evolves its own special unique snowflake of a package management system."
+
+Operating systems: rpm, deb, ports, brew
+
+Programming languages: pip, gem, npm, cpan, cabal
+
+Applications: Mozilla Firefox/T-Bird, Google Chrome, Eclipse
+
+"The wonderful thing about package managers, is that there are so many to choose from!"
+
+* Go philosophy
+
+There is this general reluctance to rebuild the same imperfect, complicated solutions.
+
+- Templates
+- Dynamic libraries
+- Package managers
+
+Question all the harmful things that have become accepted as status quo.
+This resistance to follow past compromises, is why Go can be so refreshing.
+
+DVCS-based "go get" package dependency management works for simple, rapid development. It also works for well-managed projects that follow a gentleman's agreement.
+
+This simple package management works for "The Happy Path".
+If you need better than that...
+
+* Go manage your project
+
+.image img/angry-baby.jpg
+
+You are responsible for the third-party project dependencies you chose for that Kickstarter project. Or, [[http://forums.thedailywtf.com/forums/t/27755.aspx?PageIndex=1][you confused a gopher for your mama]].
+
+* Responsible for what?
+
+Relocating "connected" packages obtained from "go get"...
+To a "disconnected" local package namespace?
+Or your own GitHub forks?
+What about multiple DVCS for third-party deps?
+
+Tracking upstream changes for the above.
+
+Re-creating the same third-party package state for other developers on your team.
+Or for a Linux distribution package?
+
+Providing attribution for all your third-party licenses.
+
+Now be honest, are you really managing your Go package dependencies as well as you should?
+If you are, I bet you are busy, or you have some awesome tools.
+Until you share them, I propose...
+
+* The Go Dependency Package Manager (godpm)
+
+Represent a project's package dependencies as a YAML file.
+- What do I need to build this project?
+- Where do I get it?
+- What revision do I get?
+- How should I map it to a local $GOPATH?
+- How should I update it? Or should I update it?
+
+godpm import
+- Parse your projects source files for external dependencies.
+- Discover which DVCS they are using.
+- Create the above godpm.yml file.
+- Map the dependencies into a project-local $GOPATH.
+- Rewrite your project's imports.
+- Generate a profile script (similar to virtualenv 'activate') to set $GOPATH.
+
+* godpm Example
+
+  ---
+  name: hockeypuck
+  upstream: launchpad.net/hockeypuck
+  deps:
+   - pkg: conflux
+     upstream: github.com/cmars/conflux
+     rev: HEAD
+   - pkg: go.crypto/openpgp
+     upstream: code.google.com/p/go.crypto/openpgp
+     rev: tip
+
+* Managing Packages
+
+godpm pull
+- Update project-local $GOPATH according to rules in godpm.yml.
+
+godpm pin <local package name> <rev>
+- Revision identifier using DVCS-specific nomenclature (tip, HEAD, branch, 0c3ae5, rel1.1, etc.)
+
+godpm tar
+- Create a tarball of the project with $GOPATH.
+
+godpm license
+- Collect all the LICENSE files from your projects. Warn if some are missing.
+
+* Request for Comments
+
+I haven't started this project yet. I'd like to gather feedback from the Go community before I go too far in the weeds.
