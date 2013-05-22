@@ -14,7 +14,7 @@
       <article>
         <h1>godpm</h1>
         <h3>A dependency package manager for the Go language.</h3>
-        <h3>17 May 2013</h3>
+        <h3>23 May 2013</h3>
         
           <div class="presenter">
             
@@ -110,7 +110,7 @@
     Question all the harmful things that have become accepted as status quo.
 <br>
 
-    This resistance to follow past compromises, is why Go can be so refreshing.
+    This reluctance to follow past compromises, is why Go can be so refreshing.
   </p>
   
 
@@ -145,6 +145,12 @@
   
   <p>
     You are responsible for the third-party project dependencies you chose for that Kickstarter project. Or, <a href="http://forums.thedailywtf.com/forums/t/27755.aspx?PageIndex=1" target="_blank">you confused a gopher for your mama</a>.
+  </p>
+  
+
+  
+  <p>
+    (Well, that was specific!)
   </p>
   
 
@@ -313,7 +319,7 @@ deps:
     godpm tar
 <br>
 
-    - Create a tarball of the project with $GOPATH.
+    - Create a tarball of the project-local $GOPATH. Basically, a source distribution with all the frozen source dependencies.
   </p>
   
 
@@ -322,7 +328,28 @@ deps:
     godpm license
 <br>
 
-    - Collect all the LICENSE files from your projects. Warn if some are missing.
+    - Collect all the LICENSE files from your projects. Warn/error if some are missing.
+  </p>
+  
+
+  
+  <p>
+    godpm deb
+<br>
+
+    - Build a skeletal Debian source package with build script/Makefile.
+<br>
+
+    - Automatically generate debian/copyright from all the package LICENSE files.
+  </p>
+  
+
+  
+  <p>
+    godpm rpm
+<br>
+
+    - Build an RPM package for RedHat-based OSes.
   </p>
   
 
@@ -337,7 +364,7 @@ deps:
         
   
   <p>
-    I haven&#39;t started this project yet. I&#39;d like to gather feedback from the Go community before I go too far in the weeds.
+    I haven&#39;t started development yet. I&#39;d like to gather feedback from the Go community before I get too far in the weeds.
   </p>
   
 
@@ -362,7 +389,7 @@ deps:
     Software Flâneur
   </p>
   
-<p class="link"><a href="mailto:casey.marshall@gmail.com" target="_blank">casey.marshall@gmail.com</a></p><p class="link"><a href="http://cmars.sdf.org" target="_blank">http://cmars.sdf.org</a></p>
+<p class="link"><a href="mailto:casey.marshall@gmail.com" target="_blank">casey.marshall@gmail.com</a></p><p class="link"><a href="https://github.com/cmars/godpm" target="_blank">https://github.com/cmars/godpm</a></p>
           </div>
         
           <div class="presenter">
