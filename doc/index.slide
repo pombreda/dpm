@@ -1,12 +1,12 @@
 godpm
 A dependency package manager for the Go language.
-17 May 2013
+23 May 2013
 Tags: golang,packaging,dependencies,distribution,flamewars
 
 Casey Marshall
 Software Flâneur
 casey.marshall@gmail.com
-http://cmars.sdf.org
+https://github.com/cmars/godpm
 
 
 * Package Managers
@@ -30,7 +30,7 @@ There is this general reluctance to rebuild the same imperfect, complicated solu
 - Package managers
 
 Question all the harmful things that have become accepted as status quo.
-This resistance to follow past compromises, is why Go can be so refreshing.
+This reluctance to follow past compromises, is why Go can be so refreshing.
 
 DVCS-based "go get" package dependency management works for simple, rapid development. It also works for well-managed projects that follow a gentleman's agreement.
 
@@ -42,6 +42,8 @@ If you need better than that...
 .image img/angry-baby.jpg
 
 You are responsible for the third-party project dependencies you chose for that Kickstarter project. Or, [[http://forums.thedailywtf.com/forums/t/27755.aspx?PageIndex=1][you confused a gopher for your mama]].
+
+(Well, that was specific!)
 
 * Responsible for what?
 
@@ -100,11 +102,18 @@ godpm pin <local package name> <rev>
 - Revision identifier using DVCS-specific nomenclature (tip, HEAD, branch, 0c3ae5, rel1.1, etc.)
 
 godpm tar
-- Create a tarball of the project with $GOPATH.
+- Create a tarball of the project-local $GOPATH. Basically, a source distribution with all the frozen source dependencies.
 
 godpm license
-- Collect all the LICENSE files from your projects. Warn if some are missing.
+- Collect all the LICENSE files from your projects. Warn/error if some are missing.
+
+godpm deb
+- Build a skeletal Debian source package with build script/Makefile.
+- Automatically generate debian/copyright from all the package LICENSE files.
+
+godpm rpm
+- Build an RPM package for RedHat-based OSes.
 
 * Request for Comments
 
-I haven't started this project yet. I'd like to gather feedback from the Go community before I go too far in the weeds.
+I haven't started development yet. I'd like to gather feedback from the Go community before I get too far in the weeds.
