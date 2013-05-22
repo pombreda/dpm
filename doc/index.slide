@@ -104,16 +104,6 @@ godpm pin <local package name> <rev>
 godpm tar
 - Create a tarball of the project-local $GOPATH. Basically, a source distribution with all the frozen source dependencies.
 
-godpm license
-- Collect all the LICENSE files from your projects. Warn/error if some are missing.
-
-godpm deb
-- Build a skeletal Debian source package with build script/Makefile.
-- Automatically generate debian/copyright from all the package LICENSE files.
-
-godpm rpm
-- Build an RPM package for RedHat-based OSes.
-
 * Request for Comments
 
 I haven't started development yet. I'd like to gather feedback from the Go community before I get too far in the weeds.
