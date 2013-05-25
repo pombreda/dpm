@@ -1,4 +1,4 @@
-godpm
+dpm
 A dependency package manager for the Go language.
 23 May 2013
 Tags: golang,packaging,dependencies,distribution,flamewars
@@ -6,36 +6,38 @@ Tags: golang,packaging,dependencies,distribution,flamewars
 Casey Marshall
 Software Flâneur
 casey.marshall@gmail.com
-https://github.com/cmars/godpm
+https://github.com/cmars/dpm
 
 
 * Package Managers
 
-"Every successful software system evolves its own special unique snowflake of a package management system."
+"A sufficiently successful software system evolves its own special unique snowflake of a package management system."
 
 Operating systems: rpm, deb, ports, brew
 
-Programming languages: pip, gem, npm, cpan, cabal
+Programming languages: pip, gem, npm, cpan, cabal, maven
 
 Applications: Mozilla Firefox/T-Bird, Google Chrome, Eclipse
 
-"The wonderful thing about package managers, is that there are so many to choose from!"
+Don't get me wrong, package management and provisioning is great. But also, complicated.
+
+- Where are packages stored? Hosted? Failover? Reliability? Uptime?
+- What if I want to package something for an OS, that has its own package management?
 
 * Go philosophy
 
-There is this general reluctance to rebuild the same imperfect, complicated solutions.
+There is this general reluctance to rebuild the same complicated solutions.
 
 - Templates
 - Dynamic libraries
 - Package managers
 
-Question all the harmful things that have become accepted as status quo.
+Question all the "harmful things" that have become accepted as status quo.
 This reluctance to follow past compromises, is why Go can be so refreshing.
 
-DVCS-based "go get" package dependency management works for simple, rapid development. It also works for well-managed projects that follow a gentleman's agreement.
+DVCS-based "go get" package dependency management works for well-managed projects that follow a gentleman's agreement.
 
-This simple package management works for "The Happy Path".
-If you need better than that...
+But for a larger, longer-term, mission-critical project you build a business on, that might not be good enough. In that case,
 
 * Go manage your project
 
@@ -43,7 +45,7 @@ If you need better than that...
 
 You are responsible for the third-party project dependencies you chose for that Kickstarter project. Or, [[http://forums.thedailywtf.com/forums/t/27755.aspx?PageIndex=1][you confused a gopher for your mama]].
 
-(Well, that was specific!)
+(Wow, that was specific!)
 
 * Responsible for what?
 
@@ -60,50 +62,77 @@ Or for a Linux distribution package?
 Providing attribution for all your third-party licenses.
 
 Now be honest, are you really managing your Go package dependencies as well as you should?
-If you are, I bet you are busy, or you have some awesome tools.
+If you are, I bet you are very busy, or you have some awesome tools.
 Until you share them, I propose...
 
-* The Go Dependency Package Manager (godpm)
+* The Go Dependency Package Manager (dpm)
 
 Represent a project's package dependencies as a YAML file.
+
 - What do I need to build this project?
 - Where do I get it?
 - What revision do I get?
-- How should I map it to a local $GOPATH?
-- How should I update it? Or should I update it?
+- How should I update it? _Should_ I update it?
 
-godpm import
-- Parse your projects source files for external dependencies.
-- Discover which DVCS they are using.
-- Create the above godpm.yml file.
-- Map the dependencies into a project-local $GOPATH.
-- Rewrite your project's imports.
-- Generate a profile script (similar to virtualenv 'activate') to set $GOPATH.
+* Getting Started with dpm
 
-* godpm Example
+  dpm import
+
+- Parses your project source files for package dependencies.
+- Creates a starting point `dpm.yml` file.
+- Check out dependencies into a project-local `$GOPATH`, `.dpm`.
+- Generate a profile script (similar to virtualenv 'activate') to set `$GOPATH`.
+
+`dpm.yml` example:
 
   ---
   name: hockeypuck
-  upstream: launchpad.net/hockeypuck
+  pkg: launchpad.net/hockeypuck
+  rev: HEAD
   deps:
-   - pkg: conflux
-     upstream: github.com/cmars/conflux
-     rev: HEAD
-   - pkg: go.crypto/openpgp
-     upstream: code.google.com/p/go.crypto/openpgp
-     rev: tip
+   - pkg: github.com/cmars/conflux
+     rev: 0c3ae5
+   - pkg: code.google.com/p/go.crypto/openpgp
+     rev: 1.1
 
 * Managing Packages
 
-godpm pull
-- Update project-local $GOPATH according to rules in godpm.yml.
+  dpm pin <package name> [-rev <rev>]
 
-godpm pin <local package name> <rev>
-- Revision identifier using DVCS-specific nomenclature (tip, HEAD, branch, 0c3ae5, rel1.1, etc.)
+- Revision identifier using DVCS-specific identifier (tip, HEAD, branch, 0c3ae5, rel1.1, etc.)
 
-godpm tar
-- Create a tarball of the project-local $GOPATH. Basically, a source distribution with all the frozen source dependencies.
+  dpm pull [-force]
+
+- Update project-local `$GOPATH` according to rules in dpm.yml. Option to force overwrite or exit if there are locally modified working copies.
+
+  dpm relocate <old upstream pkg> <new upstream pkg> [-rev <new upstream rev>]
+
+- Relocate the upstream package. Use this to point at a different upstream repository. Useful when forking an upstream project.
+
+  dpm status
+
+- Display the current state (revision, etc.) of all package dependencies.
+
+* Scope
+
+dpm is not "Maven for Go".
+
+dpm is more like virtualenv, it just manages a standalone, project-specific, repeatable `$GOPATH` for you. That's it.
+
+If you want more, write tools that operate on the `$GOPATH`. Some ideas:
+
+- Operating system packaging tools. Build `.deb` or `.rpm` packages with repeatable results.
+- Compile all the package dependency LICENSE files into a `debian/copyright` file.
+- Generate source and binary distribution tarballs, like `python`setup.py`sdist` or `bdist`.
+- Fork a package dependency and relocate in one step. Perhaps create a Github project with their API?
+- Generate cross-compiled `bdist` tarballs.
 
 * Request for Comments
 
 I haven't started development yet. I'd like to gather feedback from the Go community before I get too far in the weeds.
+
+What do you think?
+
+What would you add?
+
+What would you take away?
